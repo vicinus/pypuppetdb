@@ -1,0 +1,32 @@
+Source: pypuppetdb
+Maintainer: Daniele Sluijters <daniele.sluijters+pypi@gmail.com>
+Homepage: https://github.com/nedap/pypuppetdb
+Section: python
+Priority: optional
+Build-Depends: debhelper (>= 9), dh-python,
+ python-all (>= 2.6.6-3), python3-all,
+ python-setuptools, python3-setuptools,
+ python-requests (>= 1.2.3), python3-requests (>= 1.2.3)
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.3
+Standards-Version: 3.9.4
+
+Package: python-pypuppetdb
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-requests (>= 1.2.3)
+Description: Python PuppetDB Library (Python 2)
+ This is a Python module for working with recent versions of the PuppetDB
+ REST API. It will allow you to retrieve active nodes from PuppetDB, facts,
+ reports and events, metrics or execute freeform queries.
+ .
+ This is the Python 2 version of the package.
+
+Package: python3-pypuppetdb
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, python3-requests (>= 1.2.3)
+Description: Python PuppetDB Library (Python 3)
+ This is a Python module for working with recent versions of the PuppetDB
+ REST API. It will allow you to retrieve active nodes from PuppetDB, facts,
+ reports and events, metrics or execute freeform queries.
+ .
+ This is the Python 3 version of the package.

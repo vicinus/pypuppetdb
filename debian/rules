@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+export PYBUILD_NAME=pypuppetdb
+export PYBUILD_DESTDIR_python2=debian/python-pypuppetdb/
+export PYBUILD_DESTDIR_python3=debian/python3-pypuppetdb/
+
+%:
+	dh $@ --with python2,python3 --buildsystem=pybuild
+
+override_dh_auto_test:
+	# Do nothing, the test suite has too many dependencies not
+	# available in Debian.
+
+override_dh_installchangelogs:
+	dh_installchangelogs CHANGELOG.rst

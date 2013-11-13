@@ -1,0 +1,9 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: pypuppetdb
+Upstream-Contact: Daniele Sluijters <daniele.sluijters+pypi@gmail.com>
+Source: http://www.github.com/nedap/pypuppetdb
+
+Files: *
+Copyright: 2013 Daniele Sluijters
+License: Apache-2.0
+ Full license available at /usr/share/common-licenses/Apache-2.0

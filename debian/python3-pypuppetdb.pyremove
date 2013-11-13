@@ -1,0 +1,8 @@
+CHANGELOG.rst
+conftest.py
+README.rst
+MANIFEST.in
+python-pypuppetdb.spec
+requirements.txt
+tox.ini
+setup.cfg
