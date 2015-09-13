@@ -15,8 +15,8 @@ log = logging.getLogger(__name__)
 
 
 class API(BaseAPI):
-    """The API object for version 3 of the PuppetDB API. This object contains
-    all v3 specific methods and ways of doing things.
+    """The API object for version 4 of the PuppetDB API. This object contains
+    all v4 specific methods and ways of doing things.
 
     :param \*\*kwargs: Rest of the keywoard arguments passed on to our parent\
             :class:`~pypuppetdb.api.BaseAPI`.
@@ -24,7 +24,7 @@ class API(BaseAPI):
 
     def __init__(self, *args, **kwargs):
         """Initialise the API object."""
-        super(API, self).__init__(api_version=3, **kwargs)
+        super(API, self).__init__(api_version=4, **kwargs)
         log.debug('API initialised with {0}.'.format(kwargs))
 
     def node(self, name):
@@ -62,12 +62,13 @@ class API(BaseAPI):
         if with_status:
             latest_events = self._query(
                 'event-counts',
-                query='["=","latest-report?",true]',
+                query='["=","latest_report?",true]',
                 summarize_by='certname')
 
         for node in nodes:
             node['unreported_time'] = None
             node['status'] = None
+            node['name'] = node['certname']
 
             if with_status:
                 status = [s for s in latest_events
@@ -190,13 +191,13 @@ class API(BaseAPI):
             yield Report(
                 report['certname'],
                 report['hash'],
-                report['start-time'],
-                report['end-time'],
-                report['receive-time'],
-                report['configuration-version'],
-                report['report-format'],
-                report['puppet-version'],
-                report['transaction-uuid']
+                report['start_time'],
+                report['end_time'],
+                report['receive_time'],
+                report['configuration_version'],
+                report['report_format'],
+                report['puppet_version'],
+                report['transaction_uuid']
                 )
 
     def events(self, query, order_by=None, limit=None):
@@ -212,14 +213,14 @@ class API(BaseAPI):
                 event['status'],
                 event['timestamp'],
                 event['report'],
-                event['resource-title'],
+                event['resource_title'],
                 event['property'],
                 event['message'],
-                event['new-value'],
-                event['old-value'],
-                event['resource-type'],
-                event['containing-class'],
-                event['containment-path'],
+                event['new_value'],
+                event['old_value'],
+                event['resource_type'],
+                event['containing_class'],
+                event['containment_path'],
                 event['file'],
                 event['line'],
                 )
@@ -252,16 +253,16 @@ class API(BaseAPI):
         """Get the most recent catalog for a given node"""
         c = self._query('catalogs', path=node)
         edges = []
-        for edge in c['data']['edges']:
+        for edge in c['edges']['data']:
           edges.append({
               'relationship': edge['relationship'],
-              'identifier_source': edge['source']['type'] + \
-                  '[' + edge['source']['title'] + ']',
-              'identifier_target': edge['target']['type'] + \
-                  '[' + edge['target']['title'] + ']',
+              'identifier_source': edge['source_type'] + \
+                  '[' + edge['source_title'] + ']',
+              'identifier_target': edge['target_type'] + \
+                  '[' + edge['target_title'] + ']',
               })
-        return Catalog(c['data']['name'],
+        return Catalog(c['certname'],
                        edges,
-                       c['data']['resources'],
-                       c['data']['version'],
-                       c['data']['transaction-uuid'])
+                       c['resources']['data'],
+                       c['version'],
+                       c['transaction_uuid'])

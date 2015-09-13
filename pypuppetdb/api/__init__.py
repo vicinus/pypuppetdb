@@ -18,31 +18,47 @@ log = logging.getLogger(__name__)
 API_VERSIONS = {
     2: 'v2',
     3: 'v3',
+    4: 'v4',
 }
 
 ENDPOINTS = {
     2: {
-        'facts': 'facts',
-        'fact-names': 'fact-names',
-        'nodes': 'nodes',
-        'resources': 'resources',
-        'metrics': 'metrics',
-        'mbean': 'metrics/mbean',
+        'facts': 'v2/facts',
+        'fact-names': 'v2/fact-names',
+        'nodes': 'v2/nodes',
+        'resources': 'v2/resources',
+        'metrics': 'v2/metrics',
+        'mbean': 'v2/metrics/mbean',
     },
     3: {
-        'facts': 'facts',
-        'fact-names': 'fact-names',
-        'nodes': 'nodes',
-        'resources': 'resources',
-        'catalogs': 'catalogs',
-        'metrics': 'metrics',
-        'mbean': 'metrics/mbean',
-        'reports': 'reports',
-        'events': 'events',
-        'event-counts': 'event-counts',
-        'aggregate-event-counts': 'aggregate-event-counts',
-        'server-time': 'server-time',
-        'version': 'version',
+        'facts': 'v3/facts',
+        'fact-names': 'v3/fact-names',
+        'nodes': 'v3/nodes',
+        'resources': 'v3/resources',
+        'catalogs': 'v3/catalogs',
+        'metrics': 'v3/metrics',
+        'mbean': 'v3/metrics/mbean',
+        'reports': 'v3/reports',
+        'events': 'v3/events',
+        'event-counts': 'v3/event-counts',
+        'aggregate-event-counts': 'v3/aggregate-event-counts',
+        'server-time': 'v3/server-time',
+        'version': 'v3/version',
+    },
+    4: {
+        'facts': 'pdb/query/v4/facts',
+        'fact-names': 'pdb/query/v4/fact-names',
+        'nodes': 'pdb/query/v4/nodes',
+        'resources': 'pdb/query/v4/resources',
+        'catalogs': 'pdb/query/v4/catalogs',
+        'metrics': 'metrics/v1',
+        'mbean': 'metrics/v1/mbeans',
+        'reports': 'pdb/query/v4/reports',
+        'events': 'pdb/query/v4/events',
+        'event-counts': 'pdb/query/v4/event-counts',
+        'aggregate-event-counts': 'pdb/query/v4/aggregate-event-counts',
+        'server-time': 'pdb/meta/v1/server-time',
+        'version': 'pdb/meta/v1/version',
     },
 }
 
@@ -237,9 +253,8 @@ class BaseAPI(object):
             # exist. This shouldn't happen unless someone made a booboo.
             raise APIError
 
-        url = '{base_url}/{api_prefix}/{endpoint}'.format(
+        url = '{base_url}/{endpoint}'.format(
             base_url=self.base_url,
-            api_prefix=api_prefix,
             endpoint=endpoint,
             )
 
@@ -301,19 +316,34 @@ class BaseAPI(object):
         if query is not None:
             payload['query'] = query
         if order_by is not None:
-            payload['order-by'] = order_by
+            if self.api_version == 'v4':
+                payload['order_by'] = order_by
+            else:
+                payload['order-by'] = order_by
         if limit is not None:
             payload['limit'] = limit
         if include_total is True:
-            payload['include-total'] = json.dumps(include_total)
+            if self.api_version == 'v4':
+                payload['include_total'] = json.dumps(include_total)
+            else:
+                payload['include-total'] = json.dumps(include_total)
         if offset is not None:
             payload['offset'] = offset
         if summarize_by is not None:
-            payload['summarize-by'] = summarize_by
+            if self.api_version == 'v4':
+                payload['summarize_by'] = summarize_by
+            else:
+                payload['summarize-by'] = summarize_by
         if count_by is not None:
-            payload['count-by'] = count_by
+            if self.api_version == 'v4':
+                payload['count_by'] = count_by
+            else:
+                payload['count-by'] = count_by
         if count_filter is not None:
-            payload['count-filter'] = count_filter
+            if self.api_version == 'v4':
+                payload['count_filter'] = count_filter
+            else:
+                payload['count-filter'] = count_filter
 
         if not (payload):
             payload = None

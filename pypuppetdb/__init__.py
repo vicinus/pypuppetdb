@@ -60,6 +60,7 @@ import logging
 
 from pypuppetdb.api import v2
 from pypuppetdb.api import v3
+from pypuppetdb.api import v4
 from pypuppetdb.errors import UnsupportedVersionError
 
 try:  # Python 2.7+
@@ -121,6 +122,11 @@ def connect(api_version=3, host='localhost', port=8080, ssl_verify=False,
 
     :raises: :class:`~pypuppetdb.errors.UnsupportedVersionError`
     """
+    if api_version == 4:
+        return v4.API(host=host, port=port,
+                      timeout=timeout, ssl_verify=ssl_verify, ssl_key=ssl_key,
+                      ssl_cert=ssl_cert, protocol=protocol, url_path=url_path,
+                      username=username, password=password)
     if api_version == 3:
         return v3.API(host=host, port=port,
                       timeout=timeout, ssl_verify=ssl_verify, ssl_key=ssl_key,

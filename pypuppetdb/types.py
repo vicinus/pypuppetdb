@@ -362,16 +362,12 @@ class Catalog(object):
 
         self.edges = []
         for edge in edges:
-            identifier_source = edge['source']['type'] + \
-                '[' + edge['source']['title'] + ']'
-            identifier_target = edge['target']['type'] + \
-                '[' + edge['target']['title'] + ']'
-            e = Edge(self.resources[identifier_source],
-                     self.resources[identifier_target],
+            e = Edge(self.resources[edge['identifier_source']],
+                     self.resources[edge['identifier_target']],
                      edge['relationship'])
             self.edges.append(e)
-            self.resources[identifier_source].relationships.append(e)
-            self.resources[identifier_target].relationships.append(e)
+            self.resources[edge['identifier_source']].relationships.append(e)
+            self.resources[edge['identifier_target']].relationships.append(e)
 
         self.__string = '{0}/{1}'.format(self.node, self.transaction_uuid)
 
